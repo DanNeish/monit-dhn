@@ -19,12 +19,12 @@ bash "disabling init.d script for monit" do
   #  /etc/init.d/monit stop
 end
 
-# Use upstart to manage monit
-template '/etc/init/monit.conf' do
+# Use systemd to manage monit
+template '/lib/systemd/system/monit.service' do
   owner "root"
   group "root"
   mode "0644"
-  source "monit-upstart.conf.erb"
+  source "monit-systemd.conf.erb"
   notifies :run, "execute[restart-monit]", :immediately
 end
 
@@ -41,4 +41,8 @@ execute "restart-monit" do
   command "initctl reload-configuration"
   command "monit reload"
   action :nothing
+end
+
+execute "enable monit to start after every reboot" do
+  command "systemctl enable monit.service"
 end
