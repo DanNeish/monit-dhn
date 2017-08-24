@@ -38,7 +38,7 @@ template '/etc/default/monit' do
 end
 
 execute "restart-monit" do
-  command "initctl reload-configuration"
+  command "systemctl daemon-reload"
   command "monit reload"
   action :nothing
 end
